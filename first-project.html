@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>خطة الميزانية المحكمة</title>
+  <style>
+    body {
+      font-family: 'Tahoma', sans-serif;
+      background-color: #fceef3;
+      color: #333;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #c2185b;
+    }
+
+    .budget-form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: 20px auto;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      text-align: right;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #c2185b;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      background-color: #ffe3ed;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>خطة الميزانية المحكمة</h1>
+  <p>ادخلي دخلكِ الشهري وسنقترح لكِ توزيعًا يساعدكِ على الادخار والتحكم بالنفقات.</p>
+
+  <div class="budget-form">
+    <label for="income">الدخل الشهري (€):</label>
+    <input type="number" id="income" placeholder="مثال: 2000">
+    <button onclick="calculateBudget()">احسبي الميزانية</button>
+
+    <div class="result" id="result" style="display: none;"></div>
+  </div>
+
+  <script>
+    function calculateBudget() {
+      const income = parseFloat(document.getElementById('income').value);
+      if (!income || income <= 0) {
+        alert("الرجاء إدخال دخل شهري صالح.");
+        return;
+      }
+
+      const needs = income * 0.5;
+      const savings = income * 0.2;
+      const emergency = income * 0.1;
+      const wants = income * 0.2;
+
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('result').innerHTML = `
+        <p><strong>الضروريات:</strong> €${needs.toFixed(2)}</p>
+        <p><strong>الادخار:</strong> €${savings.toFixed(2)}</p>
+        <p><strong>الطوارئ:</strong> €${emergency.toFixed(2)}</p>
+        <p><strong>الترفيه:</strong> €${wants.toFixed(2)}</p>
+      `;
+    }
+  </script>
+
+</body>
+</html>
