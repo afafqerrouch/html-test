@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" dir="ltr">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,111 +6,142 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to right, #f9f9f9, #e9ecef);
       margin: 0;
       padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #f9f9f9, #e9ecef);
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-    }.container {
-  background: #fff;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-}
-
-h1 {
-  color: #2c3e50;
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin: 20px 0 10px;
-  text-align: left;
-  font-weight: 600;
-}
-
-input[type="number"] {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-}
-
-button {
-  margin-top: 20px;
-  padding: 12px 20px;
-  background-color: #2c3e50;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-button:hover {
-  background-color: #1a252f;
-}
-
-.result {
-  margin-top: 30px;
-  text-align: left;
-  background: #f4f6f8;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-}
-
-.result p {
-  font-size: 16px;
-  margin: 10px 0;
-}
-
+      min-height: 100vh;
+    }
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      text-align: left;
+      font-weight: 600;
+      margin: 20px 0 10px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    button {
+      flex: 1;
+      padding: 12px 20px;
+      background-color: #2c3e50;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #1a252f;
+    }
+    .result {
+      display: none;
+      margin-top: 30px;
+      text-align: left;
+      background-color: #f4f6f8;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    }
+    .result p {
+      font-size: 16px;
+      margin: 10px 0;
+    }
   </style>
 </head>
 <body>
- <div class="container">
+  <div class="container">
     <h1>Smart Budget Planner</h1>
     <label for="income">Enter Your Monthly Income (€):</label>
     <input type="number" id="income" placeholder="e.g. 2500">
-    <button onclick="calculateBudget()">Calculate Budget</button><div class="result" id="result" style="display: none;"></div>
-
-  </div>
- <script>
+    <div class="button-group">
+      <button onclick="calculateBudget()">Calculate</button>
+      <button onclick="clearBudget()">Clear</button>
+      <button onclick="printBudget()">Print</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>  <script>
     function calculateBudget() {
-      const income = parseFloat(document.getElementById('income').value);
-      if (!income || income <= 0) {
+      const incomeField = document.getElementById('income');
+      const resultBox = document.getElementById('result');
+      const income = parseFloat(incomeField.value);
+
+      if (isNaN(income) || income <= 0) {
         alert("Please enter a valid income amount.");
+        incomeField.focus();
         return;
       }
 
-      const essentials = income * 0.55;
-      const entertainment = income * 0.10;
-      const charity = income * 0.05;
-      const longTermSavings = income * 0.10;
-      const investment = income * 0.10;
-      const shortTermSavings = income * 0.10;
+      const budgetItems = [
+        { label: "Essentials", percent: 0.55 },
+        { label: "Entertainment", percent: 0.10 },
+        { label: "Charity", percent: 0.05 },
+        { label: "Long-term Savings", percent: 0.10 },
+        { label: "Investment", percent: 0.10 },
+        { label: "Short-term Savings", percent: 0.10 }
+      ];
 
-      document.getElementById('result').style.display = 'block';
-      document.getElementById('result').innerHTML = `
-        <p><strong>Essentials (55%):</strong> €${essentials.toFixed(2)}</p>
-        <p><strong>Entertainment (10%):</strong> €${entertainment.toFixed(2)}</p>
-        <p><strong>Charity (5%):</strong> €${charity.toFixed(2)}</p>
-        <p><strong>Long-term Savings (10%):</strong> €${longTermSavings.toFixed(2)}</p>
-        <p><strong>Investment (10%):</strong> €${investment.toFixed(2)}</p>
-        <p><strong>Short-term Savings (10%):</strong> €${shortTermSavings.toFixed(2)}</p>
-      `;
+      let output = "";
+      budgetItems.forEach(item => {
+        const amount = income * item.percent;
+        output += <p><strong>${item.label} (${(item.percent * 100).toFixed(0)}%):</strong> €${amount.toFixed(2)}</p>;
+      });
+
+      resultBox.innerHTML = output;
+      resultBox.style.display = 'block';
     }
-  </script>
-</body>
+
+    function clearBudget() {
+      document.getElementById('income').value = '';
+      const resultBox = document.getElementById('result');
+      resultBox.innerHTML = '';
+      resultBox.style.display = 'none';
+    }
+
+    function printBudget() {
+      const resultBox = document.getElementById('result');
+      if (resultBox.style.display === 'block') {
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write('<html><head><title>Budget Report</title></head><body>');
+        printWindow.document.write(resultBox.innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+      } else {
+        alert("Nothing to print. Please calculate your budget first.");
+      }
+    }
+  </script></body>
 </html>
