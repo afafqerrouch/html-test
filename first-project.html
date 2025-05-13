@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,17 +11,17 @@
       box-sizing: border-box;
     }
     body {
-      margin: 0;
-      padding: 0;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to right, #f9f9f9, #e9ecef);
+      margin: 0;
+      padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
     }
     .container {
-      background-color: #fff;
+      background: #fff;
       padding: 40px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -35,42 +36,35 @@
     }
     label {
       display: block;
+      margin: 20px 0 10px;
       text-align: left;
       font-weight: 600;
-      margin: 20px 0 10px;
     }
-    input[type="number"] {
+    input[type="numbers"] {
       width: 100%;
       padding: 12px;
-      border: 1px solid #ccc;
       border-radius: 10px;
+      border: 1px solid #ccc;
       font-size: 16px;
     }
-    .button-group {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 20px;
-    }
     button {
-      flex: 1;
+      margin-top: 20px;
       padding: 12px 20px;
       background-color: #2c3e50;
-      color: #fff;
+      color: white;
       border: none;
       border-radius: 10px;
       font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s ease;
     }
     button:hover {
       background-color: #1a252f;
     }
     .result {
-      display: none;
       margin-top: 30px;
       text-align: left;
-      background-color: #f4f6f8;
+      background: #f4f6f8;
       padding: 20px;
       border-radius: 15px;
       box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
@@ -86,62 +80,44 @@
     <h1>Smart Budget Planner</h1>
     <label for="income">Enter Your Monthly Income (€):</label>
     <input type="number" id="income" placeholder="e.g. 2500">
-    <div class="button-group">
-      <button onclick="calculateBudget()">Calculate</button>
-      <button onclick="clearBudget()">Clear</button>
-      <button onclick="printBudget()">Print</button>
+    <button onclick="calculateBudget()">Calculate Budget</button>
+    <div class="result" id="result" style="display: none;">
     </div>
-    <div class="result" id="result"></div>
-  </div>  <script>
+    <div class="button-group">
+    </div>
+  </div>
+
+  <script>
     function calculateBudget() {
-      const incomeField = document.getElementById('income');
-      const resultBox = document.getElementById('result');
-      const income = parseFloat(incomeField.value);
+      const incomeInput = document.getElementById('income');
+      const resultDiv = document.getElementById('result');
+      const income = parseFloat(incomeInput.value);
 
       if (isNaN(income) || income <= 0) {
         alert("Please enter a valid income amount.");
-        incomeField.focus();
+        incomeInput.focus();
         return;
       }
 
-      const budgetItems = [
-        { label: "Essentials", percent: 0.55 },
-        { label: "Entertainment", percent: 0.10 },
-        { label: "Charity", percent: 0.05 },
-        { label: "Long-term Savings", percent: 0.10 },
-        { label: "Investment", percent: 0.10 },
-        { label: "Short-term Savings", percent: 0.10 }
-      ];
+      const budget = {
+        essentials: income * 0.55,
+        entertainment: income * 0.10,
+        charity: income * 0.05,
+        longTermSavings: income * 0.10,
+        investment: income * 0.10,
+        shortTermSavings: income * 0.10
+      };
 
-      let output = "";
-      budgetItems.forEach(item => {
-        const amount = income * item.percent;
-        output += <p><strong>${item.label} (${(item.percent * 100).toFixed(0)}%):</strong> €${amount.toFixed(2)}</p>;
-      });
-
-      resultBox.innerHTML = output;
-      resultBox.style.display = 'block';
+      resultDiv.innerHTML = `
+        <p><strong>Essentials (55%):</strong> €${budget.essentials.toFixed(2)}</p>
+        <p><strong>Entertainment (10%):</strong> €${budget.entertainment.toFixed(2)}</p>
+        <p><strong>Charity (5%):</strong> €${budget.charity.toFixed(2)}</p>
+        <p><strong>Long-term Savings (10%):</strong> €${budget.longTermSavings.toFixed(2)}</p>
+        <p><strong>Investment (10%):</strong> €${budget.investment.toFixed(2)}</p>
+        <p><strong>Short-term Savings (10%):</strong> €${budget.shortTermSavings.toFixed(2)}</p>
+      `;
+      resultDiv.style.display = 'block';
     }
-
-    function clearBudget() {
-      document.getElementById('income').value = '';
-      const resultBox = document.getElementById('result');
-      resultBox.innerHTML = '';
-      resultBox.style.display = 'none';
-    }
-
-    function printBudget() {
-      const resultBox = document.getElementById('result');
-      if (resultBox.style.display === 'block') {
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write('<html><head><title>Budget Report</title></head><body>');
-        printWindow.document.write(resultBox.innerHTML);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-      } else {
-        alert("Nothing to print. Please calculate your budget first.");
-      }
-    }
-  </script></body>
+  </script>
+</body>
 </html>
